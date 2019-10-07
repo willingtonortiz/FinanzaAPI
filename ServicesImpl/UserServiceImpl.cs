@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using FinanzasBE.Entities;
 using FinanzasBE.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -14,11 +15,6 @@ namespace FinanzasBE.Services
 {
 	public class UserServiceImpl : IUserService
 	{
-		// private List<User> _users = new List<User>
-		// {
-		// 	new User{UserId = 1, Username = "admin", Password="admin", Role = Role.Admin},
-		// 	new User{UserId = 2, Username = "user", Password="user", Role = Role.User},
-		// };
 
 		private readonly FinanzasContext _context;
 		private readonly ILogger<UserServiceImpl> _logger;
@@ -33,7 +29,9 @@ namespace FinanzasBE.Services
 
 		public UserAuthentication Authenticate(long username, string password)
 		{
-			User user = _context.Users.SingleOrDefault(x => x.Username == username && x.Password == password);
+			User user = _context.Users
+				.AsNoTracking()
+				.SingleOrDefault(x => x.Username == username && x.Password == password);
 
 			if (user == null)
 				return null;
@@ -41,7 +39,7 @@ namespace FinanzasBE.Services
 			UserAuthentication authUser = new UserAuthentication();
 			authUser.Username = user.Username;
 			authUser.Role = user.Role;
-			
+
 			// Agregando el token
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -68,14 +66,33 @@ namespace FinanzasBE.Services
 			return authUser;
 		}
 
-		// public IEnumerable<User> FindAll()
-		// {
-		// 	return _context.Users.ToList().Select(x => 
-		// 	{
-		// 		x.Password = null;
-		// 		return x;
-		// 	});
-		// }
+		public User FindByUsername(long username)
+		{
+			User foundUser = _context.Users
+				.AsNoTracking()
+				.FirstOrDefault(x => x.Username == username);
+
+			return foundUser;
+		}
+
+		public void Save(User user)
+		{
+			_context.Users
+				.Add(user);
+			_context.SaveChanges();
+		}
+
+		public IEnumerable<User> FindAll()
+		{
+			return _context.Users
+				.AsNoTracking()
+				.ToList()
+				.Select(x =>
+				{
+					x.Password = null;
+					return x;
+				});
+		}
 
 		// public User FindById(int id)
 		// {

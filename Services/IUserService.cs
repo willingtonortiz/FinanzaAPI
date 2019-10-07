@@ -15,7 +15,9 @@ namespace FinanzasBE.Services
 	public interface IUserService
 	{
 		UserAuthentication Authenticate(long username, string password);
-		// IEnumerable<User> FindAll();
+		User FindByUsername(long username);
+		void Save(User user);
 		// User FindById(int id);
+		IEnumerable<User> FindAll();
 	}
 }

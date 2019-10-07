@@ -103,9 +103,6 @@ namespace FinanzasBE.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
                     b.Property<string>("Password")
                         .HasColumnType("text");
 

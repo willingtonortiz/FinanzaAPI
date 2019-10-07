@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FinanzasBE.DTOs;
 using FinanzasBE.Entities;
 using FinanzasBE.Helpers;
 using FinanzasBE.Services;
@@ -31,19 +32,44 @@ namespace FinanzasBE.Controllers
 
 			if (user == null)
 			{
-				return BadRequest(new { message = "Username or password is incorrect" });
+				return BadRequest(new { message = "Nombre de usuario o contraseña incorrectos" });
 			}
 
 			return Ok(user);
 		}
 
-		// [Authorize(Roles = Role.Admin)]
-		// [HttpGet]
-		// public IActionResult GetAll()
-		// {
-		// 	IEnumerable<User> users = _userService.FindAll();
-		// 	return Ok(users);
-		// }
+		[AllowAnonymous]
+		[HttpPost("register")]
+		public IActionResult Register([FromBody] RegisterUserDto registerUser)
+		{
+			User foundUser = _userService.FindByUsername(registerUser.Username);
+
+			if (foundUser != null)
+			{
+				return BadRequest(new { message = "User already exists" });
+			}
+
+			User newUser = new User()
+			{
+				Username = registerUser.Username,
+				Password = registerUser.Password,
+				Role = Role.User
+			};
+
+			_userService.Save(newUser);
+
+			UserAuthentication authUser = _userService.Authenticate(newUser.Username, newUser.Password);
+
+			return Ok(authUser);
+		}
+
+		[Authorize(Roles = Role.Admin)]
+		[HttpGet]
+		public IActionResult GetAll()
+		{
+			IEnumerable<User> users = _userService.FindAll();
+			return Ok(users);
+		}
 
 		// [HttpGet("{id}")]
 		// public IActionResult GetById(int id)

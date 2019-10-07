@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanzasBE.Migrations
 {
     [DbContext(typeof(FinanzasContext))]
-    [Migration("20191007003608_InitialCreate")]
+    [Migration("20191007223802_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,9 +104,6 @@ namespace FinanzasBE.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .HasColumnType("text");

@@ -30,7 +30,6 @@ namespace FinanzasBE.Migrations
                     Username = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Password = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
                     Role = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
