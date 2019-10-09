@@ -16,11 +16,13 @@ namespace FinanzasBE.Controllers
 	public class UserController : ControllerBase
 	{
 		private readonly IUserService _userService;
+		private readonly IPymeService _pymeService;
 		private readonly ILogger<UserController> _logger;
 
-		public UserController(IUserService userService, ILogger<UserController> logger)
+		public UserController(IUserService userService, IPymeService pymeService, ILogger<UserController> logger)
 		{
 			_userService = userService;
+			_pymeService = pymeService;
 			_logger = logger;
 		}
 
@@ -55,8 +57,16 @@ namespace FinanzasBE.Controllers
 				Password = registerUser.Password,
 				Role = Role.User
 			};
-
 			_userService.Save(newUser);
+
+			Pyme newPyme = new Pyme()
+			{
+				Ruc = registerUser.Username,
+				BusinessName = registerUser.BusinessName,
+				Address = registerUser.Address,
+				UserId = newUser.UserId
+			};
+			_pymeService.Save(newPyme);
 
 			UserAuthentication authUser = _userService.Authenticate(newUser.Username, newUser.Password);
 
@@ -71,23 +81,23 @@ namespace FinanzasBE.Controllers
 			return Ok(users);
 		}
 
-		// [HttpGet("{id}")]
-		// public IActionResult GetById(int id)
-		// {
-		// 	User user = _userService.FindById(id);
+		[HttpGet("{id}")]
+		public IActionResult GetById(int id)
+		{
+			User user = _userService.FindById(id);
 
-		// 	if (user == null)
-		// 	{
-		// 		return NotFound();
-		// 	}
+			if (user == null)
+			{
+				return NotFound();
+			}
 
-		// 	int currentUserId = int.Parse(User.Identity.Name);
-		// 	if (id != currentUserId && !User.IsInRole(Role.Admin))
-		// 	{
-		// 		return Forbid();
-		// 	}
+			long currentUserId = long.Parse(User.Identity.Name);
+			if (id != currentUserId && !User.IsInRole(Role.Admin))
+			{
+				return Forbid();
+			}
 
-		// 	return Ok(user);
-		// }
+			return Ok(user);
+		}
 	}
 }

@@ -5,7 +5,10 @@ namespace FinanzasBE.Entities
 	public class User
 	{
 		[Key]
-		public long Username { get; set; }
+		public int UserId { get; set; }
+
+		[DataType(DataType.Text)]
+		public string Username { get; set; }
 
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
@@ -17,6 +20,11 @@ namespace FinanzasBE.Entities
 
 		public User()
 		{
+		}
+
+		public override string ToString()
+		{
+			return $"User {{ UserId: {UserId}, Username: {Username}, Password: {Password}, Role: {Role} }}";
 		}
 	}
 }

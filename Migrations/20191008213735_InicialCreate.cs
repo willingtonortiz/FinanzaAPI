@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FinanzasBE.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InicialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,34 +27,36 @@ namespace FinanzasBE.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Username = table.Column<long>(nullable: false)
+                    UserId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Username = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Role = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Username);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Pymes",
                 columns: table => new
                 {
-                    Ruc = table.Column<int>(nullable: false)
+                    PymeId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Ruc = table.Column<string>(nullable: true),
                     BusinessName = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    UserId = table.Column<long>(nullable: false)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pymes", x => x.Ruc);
+                    table.PrimaryKey("PK_Pymes", x => x.PymeId);
                     table.ForeignKey(
                         name: "FK_Pymes_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Username",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -68,6 +70,7 @@ namespace FinanzasBE.Migrations
                     EndDate = table.Column<DateTime>(nullable: false),
                     Currency = table.Column<string>(nullable: true),
                     Amount = table.Column<double>(nullable: false),
+                    BillType = table.Column<string>(nullable: true),
                     DrawerId = table.Column<int>(nullable: false),
                     DraweeId = table.Column<int>(nullable: false)
                 },
@@ -78,7 +81,7 @@ namespace FinanzasBE.Migrations
                         name: "FK_Bills_Pymes_DrawerId",
                         column: x => x.DrawerId,
                         principalTable: "Pymes",
-                        principalColumn: "Ruc",
+                        principalColumn: "PymeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 

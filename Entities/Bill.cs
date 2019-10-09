@@ -20,8 +20,11 @@ namespace FinanzasBE.Entities
 		[DataType(DataType.Currency)]
 		public double Amount { get; set; }
 
+		[DataType(DataType.Text)]
+		public string BillType { get; set; }
+
 		public int DrawerId { get; set; }
-        public Pyme Drawer { get; set; }
+		public Pyme Drawer { get; set; }
 
 		public int DraweeId { get; set; }
 	}

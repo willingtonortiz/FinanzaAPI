@@ -50,6 +50,9 @@ namespace FinanzasBE.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("BillType")
+                        .HasColumnType("text");
+
                     b.Property<string>("Currency")
                         .HasColumnType("text");
 
@@ -74,7 +77,7 @@ namespace FinanzasBE.Migrations
 
             modelBuilder.Entity("FinanzasBE.Entities.Pyme", b =>
                 {
-                    b.Property<int>("Ruc")
+                    b.Property<int>("PymeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -85,10 +88,13 @@ namespace FinanzasBE.Migrations
                     b.Property<string>("BusinessName")
                         .HasColumnType("text");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Ruc")
+                        .HasColumnType("text");
 
-                    b.HasKey("Ruc");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PymeId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -98,9 +104,9 @@ namespace FinanzasBE.Migrations
 
             modelBuilder.Entity("FinanzasBE.Entities.User", b =>
                 {
-                    b.Property<long>("Username")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Password")
@@ -109,7 +115,10 @@ namespace FinanzasBE.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("text");
 
-                    b.HasKey("Username");
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });

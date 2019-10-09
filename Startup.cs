@@ -1,21 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using FinanzasBE.Entities;
 using FinanzasBE.Helpers;
 using FinanzasBE.Services;
+using FinanzasBE.ServicesImpl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FinanzasBE
@@ -63,6 +57,8 @@ namespace FinanzasBE
 
 			// Configuración de injección de dependencias
 			services.AddScoped<IUserService, UserServiceImpl>();
+			services.AddScoped<IPymeService, PymeServiceImpl>();
+			services.AddScoped<IBillService, BillServiceImpl>();
 
 			services.AddDbContext<FinanzasContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
 		}
