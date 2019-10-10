@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FinanzasBE.DTOs;
 
 namespace FinanzasBE.Entities
 {
@@ -27,6 +28,15 @@ namespace FinanzasBE.Entities
 
 
 		public Bank() { }
+
+		public Bank(BankDTO bankDTO)
+		{
+			BankId = bankDTO.BankId;
+			Ruc = bankDTO.Ruc;
+			BusinessName = bankDTO.BusinessName;
+			TEASoles = bankDTO.TEASoles;
+			TEADolares = bankDTO.TEADolares;
+		}
 
 		public override string ToString()
 		{

@@ -59,6 +59,7 @@ namespace FinanzasBE
 			services.AddScoped<IUserService, UserServiceImpl>();
 			services.AddScoped<IPymeService, PymeServiceImpl>();
 			services.AddScoped<IBillService, BillServiceImpl>();
+			services.AddScoped<IBankService, BankServiceImpl>();
 
 			services.AddDbContext<FinanzasContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
 		}

@@ -16,7 +16,7 @@ namespace FinanzasBE.Controllers
 	{
 		private readonly IBillService _billService;
 		private readonly IPymeService _pymeService;
-		ILogger<BillController> _logger;
+		private readonly ILogger<BillController> _logger;
 
 		public BillController(IBillService billService, IPymeService pymeService, ILogger<BillController> logger)
 		{
