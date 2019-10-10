@@ -30,7 +30,7 @@ namespace FinanzasBE.Controllers
 		[HttpPost("authenticate")]
 		public IActionResult Authenticate([FromBody] User userParam)
 		{
-			UserAuthentication user = _userService.Authenticate(userParam.Username, userParam.Password);
+			UserAuthenticationDTO user = _userService.Authenticate(userParam.Username, userParam.Password);
 
 			if (user == null)
 			{
@@ -68,7 +68,7 @@ namespace FinanzasBE.Controllers
 			};
 			_pymeService.Save(newPyme);
 
-			UserAuthentication authUser = _userService.Authenticate(newUser.Username, newUser.Password);
+			UserAuthenticationDTO authUser = _userService.Authenticate(newUser.Username, newUser.Password);
 
 			return Ok(authUser);
 		}

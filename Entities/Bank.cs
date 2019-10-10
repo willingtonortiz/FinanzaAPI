@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FinanzasBE.Entities
@@ -5,7 +6,10 @@ namespace FinanzasBE.Entities
 	public class Bank
 	{
 		[Key]
-		public int Ruc { get; set; }
+		public int BankId { get; set; }
+
+		[DataType(DataType.Text)]
+		public string Ruc { get; set; }
 
 		[DataType(DataType.Text)]
 		public string BusinessName { get; set; }
@@ -16,6 +20,17 @@ namespace FinanzasBE.Entities
 		[DataType(DataType.Currency)]
 		public double TEADolares { get; set; }
 
+
+
+		public List<DiscountPool> DiscountPools { get; set; }
+
+
+
 		public Bank() { }
+
+		public override string ToString()
+		{
+			return $"Bank {{ BankId: {BankId}, Ruc: {Ruc}, BusinessName: {BusinessName} TEASoles: {TEASoles}, TEADolares: {TEADolares}}}";
+		}
 	}
 }

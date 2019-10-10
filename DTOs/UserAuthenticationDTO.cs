@@ -1,6 +1,6 @@
 namespace FinanzasBE.DTOs
 {
-	public class UserAuthentication
+	public class UserAuthenticationDTO
 	{
 		public int Id { get; set; }
 		public string Username { get; set; }

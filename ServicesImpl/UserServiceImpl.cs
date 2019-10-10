@@ -29,7 +29,7 @@ namespace FinanzasBE.ServicesImpl
 			_logger = logger;
 		}
 
-		public UserAuthentication Authenticate(string username, string password)
+		public UserAuthenticationDTO Authenticate(string username, string password)
 		{
 			User user = _context.Users
 				.AsNoTracking()
@@ -38,7 +38,7 @@ namespace FinanzasBE.ServicesImpl
 			if (user == null)
 				return null;
 
-			UserAuthentication authUser = new UserAuthentication();
+			UserAuthenticationDTO authUser = new UserAuthenticationDTO();
 			authUser.Id = user.UserId;
 			authUser.Username = user.Username;
 			authUser.Role = user.Role;

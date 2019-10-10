@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FinanzasBE.DTOs;
 
 namespace FinanzasBE.Entities
 {
@@ -18,13 +19,27 @@ namespace FinanzasBE.Entities
 		public string Address { get; set; }
 
 
+
 		public int UserId { get; set; }
 		public User User { get; set; }
 
+
+
 		public List<Bill> Bills { get; set; }
+
+
+		public List<DiscountPool> DiscountPools { get; set; }
 
 		public Pyme()
 		{
+		}
+
+		public Pyme(PymeDTO pymeDTO)
+		{
+			PymeId = pymeDTO.PymeId;
+			Ruc = pymeDTO.Ruc;
+			BusinessName = pymeDTO.BusinessName;
+			Address = pymeDTO.Address;
 		}
 
 		public override string ToString()

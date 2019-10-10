@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FinanzasBE.DTOs;
 
 namespace FinanzasBE.Entities
 {
@@ -20,6 +21,14 @@ namespace FinanzasBE.Entities
 
 		public User()
 		{
+		}
+
+		public User(UserDTO userDto)
+		{
+			UserId = userDto.UserId;
+			Username = userDto.Username;
+			Password = userDto.Password;
+			Role = userDto.Role;
 		}
 
 		public override string ToString()

@@ -15,7 +15,7 @@ namespace FinanzasBE.Services
 {
 	public interface IUserService
 	{
-		UserAuthentication Authenticate(string username, string password);
+		UserAuthenticationDTO Authenticate(string username, string password);
 		User FindByUsername(string username);
 		void Save(User user);
 		User FindById(int id);
