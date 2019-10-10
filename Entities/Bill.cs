@@ -20,12 +20,17 @@ namespace FinanzasBE.Entities
 		[DataType(DataType.Currency)]
 		public double Amount { get; set; }
 
-		[DataType(DataType.Text)]
-		public string BillType { get; set; }
+		// POR PAGAR 1, POR COBRAR 2, DESCONTADA 3
+		[Range(1, 3)]
+		public int BillType { get; set; }
 
-		public int DrawerId { get; set; }
-		public Pyme Drawer { get; set; }
+		public string DrawerRuc { get; set; }
 
-		public int DraweeId { get; set; }
+		public string DraweeRuc { get; set; }
+
+		// Una pyme puede tener muchas letras asociadas
+		// ya sea por cobra, por pagar o descontada
+		public int PymeId { get; set; }
+		public Pyme Pyme { get; set; }
 	}
 }

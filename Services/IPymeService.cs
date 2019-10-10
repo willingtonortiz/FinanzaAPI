@@ -4,7 +4,8 @@ namespace FinanzasBE.Services
 {
 	public interface IPymeService
 	{
-		void Save(Pyme pyme);
+		Pyme FindByUserId(int userId);
 		Pyme FindByRuc(string ruc);
+		void Save(Pyme pyme);
 	}
 }

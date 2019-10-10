@@ -50,27 +50,30 @@ namespace FinanzasBE.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("BillType")
-                        .HasColumnType("text");
+                    b.Property<int>("BillType")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Currency")
                         .HasColumnType("text");
 
-                    b.Property<int>("DraweeId")
-                        .HasColumnType("integer");
+                    b.Property<string>("DraweeRuc")
+                        .HasColumnType("text");
 
-                    b.Property<int>("DrawerId")
-                        .HasColumnType("integer");
+                    b.Property<string>("DrawerRuc")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("PymeId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("BillId");
 
-                    b.HasIndex("DrawerId");
+                    b.HasIndex("PymeId");
 
                     b.ToTable("Bills");
                 });
@@ -125,9 +128,9 @@ namespace FinanzasBE.Migrations
 
             modelBuilder.Entity("FinanzasBE.Entities.Bill", b =>
                 {
-                    b.HasOne("FinanzasBE.Entities.Pyme", "Drawer")
+                    b.HasOne("FinanzasBE.Entities.Pyme", "Pyme")
                         .WithMany("Bills")
-                        .HasForeignKey("DrawerId")
+                        .HasForeignKey("PymeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

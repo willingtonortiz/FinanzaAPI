@@ -15,11 +15,29 @@ namespace FinanzasBE.ServicesImpl
 			_context = context;
 		}
 
-		public IEnumerable<Bill> FindByRuc(string ruc)
+		public IEnumerable<Bill> FindByPymeId(int pymeId)
 		{
 			return _context.Bills
 				.AsNoTracking()
-				.Where(x => x.Drawer.Ruc == ruc);
+				.Include(x => x.Pyme)
+				.Where(x => x.PymeId == pymeId);
+		}
+
+		public Bill FindById(int billId)
+		{
+			return _context.Bills
+				.AsNoTracking()
+				.FirstOrDefault(x => x.BillId == billId);
+		}
+
+		public Bill Create(Bill bill)
+		{
+			_context.Bills
+				.Add(bill);
+
+			_context.SaveChanges();
+
+			return bill;
 		}
 	}
 }

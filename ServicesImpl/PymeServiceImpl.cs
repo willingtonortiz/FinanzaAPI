@@ -14,6 +14,13 @@ namespace FinanzasBE.ServicesImpl
 			_context = context;
 		}
 
+		public Pyme FindByUserId(int userId)
+		{
+			return _context.Pymes
+				.AsNoTracking()
+				.FirstOrDefault(x => x.UserId == userId);
+		}
+
 		public Pyme FindByRuc(string ruc)
 		{
 			return _context.Pymes

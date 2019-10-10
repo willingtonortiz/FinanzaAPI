@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FinanzasBE.Migrations
 {
-    public partial class InicialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,25 +70,26 @@ namespace FinanzasBE.Migrations
                     EndDate = table.Column<DateTime>(nullable: false),
                     Currency = table.Column<string>(nullable: true),
                     Amount = table.Column<double>(nullable: false),
-                    BillType = table.Column<string>(nullable: true),
-                    DrawerId = table.Column<int>(nullable: false),
-                    DraweeId = table.Column<int>(nullable: false)
+                    BillType = table.Column<int>(nullable: false),
+                    DrawerRuc = table.Column<string>(nullable: true),
+                    DraweeRuc = table.Column<string>(nullable: true),
+                    PymeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bills", x => x.BillId);
                     table.ForeignKey(
-                        name: "FK_Bills_Pymes_DrawerId",
-                        column: x => x.DrawerId,
+                        name: "FK_Bills_Pymes_PymeId",
+                        column: x => x.PymeId,
                         principalTable: "Pymes",
                         principalColumn: "PymeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bills_DrawerId",
+                name: "IX_Bills_PymeId",
                 table: "Bills",
-                column: "DrawerId");
+                column: "PymeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pymes_UserId",
