@@ -3,18 +3,21 @@ using FinanzasBE.Entities;
 using FinanzasBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace FinanzasBE.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
-	public class TestController : ControllerBase
+	[Route("api/[controller]")]
+	public class TestsController : ControllerBase
 	{
 		private readonly IBankService _bankService;
+		private readonly ILogger<TestsController> _logger;
 
-		public TestController(IBankService bankService)
+		public TestsController(IBankService bankService, ILogger<TestsController> logger)
 		{
+			_logger = logger;
 			_bankService = bankService;
 		}
 
@@ -37,6 +40,14 @@ namespace FinanzasBE.Controllers
 			bankDto.BankId = bank.BankId;
 
 			return bankDto;
+		}
+
+		[AllowAnonymous]
+		[HttpGet("customers/{customerId}/orders/{orderId}")]
+		public ActionResult<string> CustomUrl(int customerId, int orderId)
+		{
+			_logger.LogWarning($"CustomeId: {customerId}, OrderId: {orderId}");
+			return Ok(new {customerId, orderId});
 		}
 	}
 }

@@ -13,13 +13,13 @@ namespace FinanzasBE.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
-	public class UserController : ControllerBase
+	public class UsersController : ControllerBase
 	{
 		private readonly IUserService _userService;
 		private readonly IPymeService _pymeService;
-		private readonly ILogger<UserController> _logger;
+		private readonly ILogger<UsersController> _logger;
 
-		public UserController(IUserService userService, IPymeService pymeService, ILogger<UserController> logger)
+		public UsersController(IUserService userService, IPymeService pymeService, ILogger<UsersController> logger)
 		{
 			_userService = userService;
 			_pymeService = pymeService;

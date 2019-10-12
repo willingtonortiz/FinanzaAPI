@@ -12,13 +12,13 @@ namespace FinanzasBE.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
-	public class BankController : ControllerBase
+	public class BanksController : ControllerBase
 	{
 		private readonly IBankService _bankService;
 
-		private readonly ILogger<BankController> _logger;
+		private readonly ILogger<BanksController> _logger;
 
-		public BankController(IBankService bankService, ILogger<BankController> logger)
+		public BanksController(IBankService bankService, ILogger<BanksController> logger)
 		{
 			_bankService = bankService;
 			_logger = logger;
@@ -38,6 +38,8 @@ namespace FinanzasBE.Controllers
 				TEASoles = x.TEASoles,
 				TEADolares = x.TEADolares
 			});
+
+			_logger.LogWarning("llegue");
 
 			return bankDTOs.ToList();
 		}

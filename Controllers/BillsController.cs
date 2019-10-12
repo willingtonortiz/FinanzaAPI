@@ -12,13 +12,13 @@ namespace FinanzasBE.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
-	public class BillController : ControllerBase
+	public class BillsController : ControllerBase
 	{
 		private readonly IBillService _billService;
 		private readonly IPymeService _pymeService;
-		private readonly ILogger<BillController> _logger;
+		private readonly ILogger<BillsController> _logger;
 
-		public BillController(IBillService billService, IPymeService pymeService, ILogger<BillController> logger)
+		public BillsController(IBillService billService, IPymeService pymeService, ILogger<BillsController> logger)
 		{
 			_billService = billService;
 			_pymeService = pymeService;
