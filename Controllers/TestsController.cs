@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FinanzasBE.DTOs;
 using FinanzasBE.Entities;
 using FinanzasBE.Services;
@@ -44,10 +45,39 @@ namespace FinanzasBE.Controllers
 
 		[AllowAnonymous]
 		[HttpGet("customers/{customerId}/orders/{orderId}")]
-		public ActionResult<string> CustomUrl(int customerId, int orderId)
+		public ActionResult<object> CustomUrl(int customerId, int orderId)
 		{
 			_logger.LogWarning($"CustomeId: {customerId}, OrderId: {orderId}");
-			return Ok(new {customerId, orderId});
+			return Ok(new { customerId, orderId });
 		}
+
+		[AllowAnonymous]
+		[HttpGet("object")]
+		public ActionResult<object> CustomObject()
+		{
+			return new
+			{
+				propa = "propa",
+				propb = 12345,
+				propc = new
+				{
+					propca = "propca"
+				},
+				propd = new List<object>{
+					new {propda = "propda"},
+					new {propdb = 78945}
+				}
+			};
+		}
+
+		[AllowAnonymous]
+		[HttpPost("object")]
+		public ActionResult<object> CustomObject([FromBody] object obj)
+		{
+			_logger.LogWarning(obj.ToString());
+
+			return Ok();
+		}
+
 	}
 }

@@ -17,12 +17,15 @@ namespace FinanzasBE.ServicesImpl
 {
 	public class UserServiceImpl : IUserService
 	{
-
 		private readonly FinanzasContext _context;
 		private readonly ILogger<UserServiceImpl> _logger;
 		private readonly AppSettings _appSettings;
 
-		public UserServiceImpl(FinanzasContext context, IOptions<AppSettings> appSettings, ILogger<UserServiceImpl> logger)
+		public UserServiceImpl(
+			FinanzasContext context,
+			IOptions<AppSettings> appSettings,
+			ILogger<UserServiceImpl> logger
+			)
 		{
 			_context = context;
 			_appSettings = appSettings.Value;

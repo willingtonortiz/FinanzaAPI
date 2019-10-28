@@ -8,7 +8,7 @@ namespace FinanzasBE.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller")]
+	[Route("api/[controller]")]
 	public class PymesController : ControllerBase
 	{
 		private readonly IPymeService _pymeService;

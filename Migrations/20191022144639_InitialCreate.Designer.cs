@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanzasBE.Migrations
 {
     [DbContext(typeof(FinanzasContext))]
-    [Migration("20191010040849_InitialCreate")]
+    [Migration("20191022144639_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,9 +91,9 @@ namespace FinanzasBE.Migrations
                             Currency = "SOLES",
                             DraweeRuc = "20123456789",
                             DrawerRuc = "20123456789",
-                            EndDate = new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(766),
+                            EndDate = new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(74),
                             PymeId = 1,
-                            StartDate = new DateTime(2019, 10, 9, 23, 8, 49, 182, DateTimeKind.Local).AddTicks(7381)
+                            StartDate = new DateTime(2019, 10, 22, 9, 46, 38, 490, DateTimeKind.Local).AddTicks(7249)
                         },
                         new
                         {
@@ -103,9 +103,9 @@ namespace FinanzasBE.Migrations
                             Currency = "DOLARES",
                             DraweeRuc = "20123456789",
                             DrawerRuc = "20123456789",
-                            EndDate = new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1847),
+                            EndDate = new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1162),
                             PymeId = 1,
-                            StartDate = new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1826)
+                            StartDate = new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1141)
                         },
                         new
                         {
@@ -115,9 +115,9 @@ namespace FinanzasBE.Migrations
                             Currency = "SOLES",
                             DraweeRuc = "20123456789",
                             DrawerRuc = "20123456789",
-                            EndDate = new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1871),
+                            EndDate = new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1190),
                             PymeId = 1,
-                            StartDate = new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1869)
+                            StartDate = new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1188)
                         });
                 });
 
@@ -149,6 +149,9 @@ namespace FinanzasBE.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("integer");
 
+                    b.Property<double>("DeliveredValue")
+                        .HasColumnType("double precision");
+
                     b.Property<int>("DiscountDays")
                         .HasColumnType("integer");
 
@@ -176,7 +179,7 @@ namespace FinanzasBE.Migrations
                     b.Property<double>("Tcea")
                         .HasColumnType("double precision");
 
-                    b.Property<double>("Tea")
+                    b.Property<double>("Tep")
                         .HasColumnType("double precision");
 
                     b.HasKey("DiscountId");
@@ -222,14 +225,20 @@ namespace FinanzasBE.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BankId")
+                    b.Property<int?>("BankId")
                         .HasColumnType("integer");
+
+                    b.Property<double>("DeliveredValue")
+                        .HasColumnType("double precision");
 
                     b.Property<DateTime>("DiscountDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("PymeId")
                         .HasColumnType("integer");
+
+                    b.Property<double>("ReceivedValue")
+                        .HasColumnType("double precision");
 
                     b.Property<double>("TCEA")
                         .HasColumnType("double precision");
@@ -328,7 +337,7 @@ namespace FinanzasBE.Migrations
                         .IsRequired();
 
                     b.HasOne("FinanzasBE.Entities.DiscountPool", "DiscountPool")
-                        .WithMany()
+                        .WithMany("Discounts")
                         .HasForeignKey("DiscountPoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -353,9 +362,7 @@ namespace FinanzasBE.Migrations
                 {
                     b.HasOne("FinanzasBE.Entities.Bank", "Bank")
                         .WithMany("DiscountPools")
-                        .HasForeignKey("BankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BankId");
 
                     b.HasOne("FinanzasBE.Entities.Pyme", "Pyme")
                         .WithMany("DiscountPools")

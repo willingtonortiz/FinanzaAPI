@@ -11,7 +11,7 @@ namespace FinanzasBE.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class BillsController : ControllerBase
 	{
 		private readonly IBillService _billService;

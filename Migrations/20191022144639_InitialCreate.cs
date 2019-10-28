@@ -107,10 +107,12 @@ namespace FinanzasBE.Migrations
                 {
                     DiscountPoolId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReceivedValue = table.Column<double>(nullable: false),
+                    DeliveredValue = table.Column<double>(nullable: false),
                     TCEA = table.Column<double>(nullable: false),
                     DiscountDate = table.Column<DateTime>(nullable: false),
                     PymeId = table.Column<int>(nullable: false),
-                    BankId = table.Column<int>(nullable: false)
+                    BankId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -120,7 +122,7 @@ namespace FinanzasBE.Migrations
                         column: x => x.BankId,
                         principalTable: "Banks",
                         principalColumn: "BankId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DiscountPools_Pymes_PymeId",
                         column: x => x.PymeId,
@@ -137,12 +139,13 @@ namespace FinanzasBE.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Retention = table.Column<double>(nullable: false),
                     DiscountDays = table.Column<int>(nullable: false),
-                    Tea = table.Column<double>(nullable: false),
+                    Tep = table.Column<double>(nullable: false),
                     DiscountRate = table.Column<double>(nullable: false),
                     InitialCost = table.Column<double>(nullable: false),
                     FinalCost = table.Column<double>(nullable: false),
                     NetValue = table.Column<double>(nullable: false),
                     ReceivedValue = table.Column<double>(nullable: false),
+                    DeliveredValue = table.Column<double>(nullable: false),
                     Tcea = table.Column<double>(nullable: false),
                     BillId = table.Column<int>(nullable: false),
                     DiscountPoolId = table.Column<int>(nullable: false)
@@ -207,9 +210,9 @@ namespace FinanzasBE.Migrations
                 columns: new[] { "BillId", "Amount", "BillType", "Currency", "DraweeRuc", "DrawerRuc", "EndDate", "PymeId", "StartDate" },
                 values: new object[,]
                 {
-                    { 1, 1000.0, 1, "SOLES", "20123456789", "20123456789", new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(766), 1, new DateTime(2019, 10, 9, 23, 8, 49, 182, DateTimeKind.Local).AddTicks(7381) },
-                    { 2, 2000.0, 2, "DOLARES", "20123456789", "20123456789", new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1847), 1, new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1826) },
-                    { 3, 3000.0, 3, "SOLES", "20123456789", "20123456789", new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1871), 1, new DateTime(2019, 10, 9, 23, 8, 49, 184, DateTimeKind.Local).AddTicks(1869) }
+                    { 1, 1000.0, 1, "SOLES", "20123456789", "20123456789", new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(74), 1, new DateTime(2019, 10, 22, 9, 46, 38, 490, DateTimeKind.Local).AddTicks(7249) },
+                    { 2, 2000.0, 2, "DOLARES", "20123456789", "20123456789", new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1162), 1, new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1141) },
+                    { 3, 3000.0, 3, "SOLES", "20123456789", "20123456789", new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1190), 1, new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1188) }
                 });
 
             migrationBuilder.CreateIndex(

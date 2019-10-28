@@ -11,7 +11,7 @@ namespace FinanzasBE.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class BanksController : ControllerBase
 	{
 		private readonly IBankService _bankService;

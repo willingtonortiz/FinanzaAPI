@@ -12,14 +12,18 @@ namespace FinanzasBE.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class UsersController : ControllerBase
 	{
 		private readonly IUserService _userService;
 		private readonly IPymeService _pymeService;
 		private readonly ILogger<UsersController> _logger;
 
-		public UsersController(IUserService userService, IPymeService pymeService, ILogger<UsersController> logger)
+		public UsersController(
+			IUserService userService,
+			IPymeService pymeService,
+			ILogger<UsersController> logger
+			)
 		{
 			_userService = userService;
 			_pymeService = pymeService;
@@ -30,15 +34,18 @@ namespace FinanzasBE.Controllers
 		[HttpPost("authenticate")]
 		public IActionResult Authenticate([FromBody] User userParam)
 		{
+			_logger.LogWarning($"{userParam.Username} => {userParam.Password}");
+
 			UserAuthenticationDTO user = _userService.Authenticate(userParam.Username, userParam.Password);
 
 			if (user == null)
 			{
-				return BadRequest(new { message = "Nombre de usuario o contraseña incorrectos" });
+				return NotFound();
 			}
 
 			return Ok(user);
 		}
+
 
 		[AllowAnonymous]
 		[HttpPost("register")]
@@ -73,6 +80,7 @@ namespace FinanzasBE.Controllers
 			return Ok(authUser);
 		}
 
+
 		[Authorize(Roles = Role.Admin)]
 		[HttpGet]
 		public IActionResult GetAll()
@@ -80,6 +88,7 @@ namespace FinanzasBE.Controllers
 			IEnumerable<User> users = _userService.FindAll();
 			return Ok(users);
 		}
+
 
 		[HttpGet("{id}")]
 		public IActionResult GetById(int id)

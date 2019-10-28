@@ -60,6 +60,7 @@ namespace FinanzasBE
 			services.AddScoped<IPymeService, PymeServiceImpl>();
 			services.AddScoped<IBillService, BillServiceImpl>();
 			services.AddScoped<IBankService, BankServiceImpl>();
+			services.AddScoped<IDiscountPoolService, DiscountPoolServiceImpl>();
 
 			services.AddDbContext<FinanzasContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
 		}
