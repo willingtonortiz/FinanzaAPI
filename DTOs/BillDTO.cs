@@ -1,33 +1,19 @@
 using System;
 using FinanzasBE.Entities;
+using FinanzasBE.Enums;
 
 namespace FinanzasBE.DTOs
 {
-	public class BillDTO
-	{
-		public int BillId { get; set; }
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
-		public string Currency { get; set; }
-		public double Amount { get; set; }
-		public int BillType { get; set; }
-		public string DrawerRuc { get; set; }
-		public string DraweeRuc { get; set; }
-
-		public BillDTO()
-		{
-		}
-
-		public BillDTO(Bill bill)
-		{
-			BillId = bill.BillId;
-			StartDate = bill.StartDate;
-			EndDate = bill.EndDate;
-			Currency = bill.Currency;
-			Amount = bill.Amount;
-			BillType = bill.BillType;
-			DrawerRuc = bill.DrawerRuc;
-			DraweeRuc = bill.DraweeRuc;
-		}
-	}
+    public class BillDTO
+    {
+        public int BillId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public CurrencyCode CurrencyCode { get; set; }
+        public double Amount { get; set; }
+        public BillType Type { get; set; }
+        public BillStatus Status { get; set; }
+        public string DrawerRuc { get; set; }
+        public string DraweeRuc { get; set; }
+    }
 }

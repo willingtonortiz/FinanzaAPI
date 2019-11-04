@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using FinanzasBE.Converters;
 using FinanzasBE.DTOs;
 using FinanzasBE.Entities;
+using FinanzasBE.Enums;
 using FinanzasBE.Helpers;
 using FinanzasBE.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,103 +13,91 @@ using Microsoft.Extensions.Logging;
 
 namespace FinanzasBE.Controllers
 {
-	[Authorize]
-	[ApiController]
-	[Route("api/[controller]")]
-	public class UsersController : ControllerBase
-	{
-		private readonly IUserService _userService;
-		private readonly IPymeService _pymeService;
-		private readonly ILogger<UsersController> _logger;
+    [Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UsersController : ControllerBase
+    {
+        private readonly ILogger<UsersController> _logger;
+        private readonly IUserService _userService;
+        private readonly IPymeService _pymeService;
+        private readonly IBillService _billService;
+        private readonly BillConverter _billConverter;
 
-		public UsersController(
-			IUserService userService,
-			IPymeService pymeService,
-			ILogger<UsersController> logger
-			)
-		{
-			_userService = userService;
-			_pymeService = pymeService;
-			_logger = logger;
-		}
-
-		[AllowAnonymous]
-		[HttpPost("authenticate")]
-		public IActionResult Authenticate([FromBody] User userParam)
-		{
-			_logger.LogWarning($"{userParam.Username} => {userParam.Password}");
-
-			UserAuthenticationDTO user = _userService.Authenticate(userParam.Username, userParam.Password);
-
-			if (user == null)
-			{
-				return NotFound();
-			}
-
-			return Ok(user);
-		}
+        public UsersController(
+            ILogger<UsersController> logger,
+            IUserService userService,
+            IPymeService pymeService,
+            IBillService billService,
+            BillConverter billConverter
+        )
+        {
+            _logger = logger;
+            _userService = userService;
+            _pymeService = pymeService;
+            _billService = billService;
+            _billConverter = billConverter;
+        }
 
 
-		[AllowAnonymous]
-		[HttpPost("register")]
-		public IActionResult Register([FromBody] RegisterUserDto registerUser)
-		{
-			User foundUser = _userService.FindByUsername(registerUser.Username);
+        #region FindAll
 
-			if (foundUser != null)
-			{
-				return BadRequest(new { message = "User already exists" });
-			}
+        // [Authorize(Roles = Role.Admin)]
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult<IEnumerable<User>> FindAll()
+        {
+            IEnumerable<User> users = _userService.FindAll();
+            return Ok(users);
+        }
 
-			User newUser = new User()
-			{
-				Username = registerUser.Username,
-				Password = registerUser.Password,
-				Role = Role.User
-			};
-			_userService.Save(newUser);
-
-			Pyme newPyme = new Pyme()
-			{
-				Ruc = registerUser.Username,
-				BusinessName = registerUser.BusinessName,
-				Address = registerUser.Address,
-				UserId = newUser.UserId
-			};
-			_pymeService.Save(newPyme);
-
-			UserAuthenticationDTO authUser = _userService.Authenticate(newUser.Username, newUser.Password);
-
-			return Ok(authUser);
-		}
+        #endregion
 
 
-		[Authorize(Roles = Role.Admin)]
-		[HttpGet]
-		public IActionResult GetAll()
-		{
-			IEnumerable<User> users = _userService.FindAll();
-			return Ok(users);
-		}
+        #region FindById
+
+        [HttpGet("{id}")]
+        public ActionResult FindById(int id)
+        {
+            User user = _userService.FindById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            long currentUserId = long.Parse(User.Identity.Name);
+            if (id != currentUserId && !User.IsInRole(RoleType.ADMIN))
+            {
+                return Forbid();
+            }
+
+            return Ok(user);
+        }
+
+        #endregion
 
 
-		[HttpGet("{id}")]
-		public IActionResult GetById(int id)
-		{
-			User user = _userService.FindById(id);
+        #region FindBillsByUserId
 
-			if (user == null)
-			{
-				return NotFound();
-			}
+        [AllowAnonymous]
+        [HttpGet("{userId}/bills")]
+        public ActionResult<IEnumerable<BillDTO>> FindBillsByUserId(
+            [FromRoute] int userId
+        )
+        {
+            User foundUser = _userService.FindById(userId);
 
-			long currentUserId = long.Parse(User.Identity.Name);
-			if (id != currentUserId && !User.IsInRole(Role.Admin))
-			{
-				return Forbid();
-			}
+            if (foundUser == null)
+            {
+                return BadRequest();
+            }
 
-			return Ok(user);
-		}
-	}
+            IEnumerable<Bill> bills = _billService.FindByUserId(userId);
+
+            return bills.Select(x => _billConverter.FromEntity(x)).ToList();
+        }
+
+        #endregion
+    }
 }

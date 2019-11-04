@@ -10,12 +10,5 @@ namespace FinanzasBE.DTOs
 		public string Role { get; set; }
 
 		public UserDTO() { }
-		public UserDTO(User user)
-		{
-			UserId = user.UserId;
-			Username = user.Username;
-			Password = user.Password;
-			Role = user.Role;
-		}
 	}
 }

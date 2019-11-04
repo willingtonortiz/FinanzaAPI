@@ -21,27 +21,7 @@ namespace FinanzasBE.Controllers
 			_logger = logger;
 			_bankService = bankService;
 		}
-
-		[AllowAnonymous]
-		[HttpPost]
-		public ActionResult<BankDTO> Create([FromBody] BankDTO bankDto)
-		{
-			Bank foundBank = _bankService.FindByRuc(bankDto.Ruc);
-
-
-			if (foundBank != null)
-			{
-				return BadRequest();
-			}
-
-			Bank bank = new Bank(bankDto);
-
-			_bankService.Create(bank);
-
-			bankDto.BankId = bank.BankId;
-
-			return bankDto;
-		}
+		
 
 		[AllowAnonymous]
 		[HttpGet("customers/{customerId}/orders/{orderId}")]
@@ -49,34 +29,6 @@ namespace FinanzasBE.Controllers
 		{
 			_logger.LogWarning($"CustomeId: {customerId}, OrderId: {orderId}");
 			return Ok(new { customerId, orderId });
-		}
-
-		[AllowAnonymous]
-		[HttpGet("object")]
-		public ActionResult<object> CustomObject()
-		{
-			return new
-			{
-				propa = "propa",
-				propb = 12345,
-				propc = new
-				{
-					propca = "propca"
-				},
-				propd = new List<object>{
-					new {propda = "propda"},
-					new {propdb = 78945}
-				}
-			};
-		}
-
-		[AllowAnonymous]
-		[HttpPost("object")]
-		public ActionResult<object> CustomObject([FromBody] object obj)
-		{
-			_logger.LogWarning(obj.ToString());
-
-			return Ok();
 		}
 
 	}

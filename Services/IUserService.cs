@@ -20,5 +20,6 @@ namespace FinanzasBE.Services
 		void Save(User user);
 		User FindById(int id);
 		IEnumerable<User> FindAll();
+		void DeleteAll();
 	}
 }

@@ -9,40 +9,65 @@ using Microsoft.Extensions.Logging;
 
 namespace FinanzasBE.Controllers
 {
-	[Authorize]
-	[ApiController]
-	[Route("api/[controller]")]
-	public class BanksController : ControllerBase
-	{
-		private readonly IBankService _bankService;
+    [Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class BanksController : ControllerBase
+    {
+        private readonly IBankService _bankService;
 
-		private readonly ILogger<BanksController> _logger;
+        private readonly ILogger<BanksController> _logger;
 
-		public BanksController(IBankService bankService, ILogger<BanksController> logger)
-		{
-			_bankService = bankService;
-			_logger = logger;
-		}
+        public BanksController(IBankService bankService, ILogger<BanksController> logger)
+        {
+            _bankService = bankService;
+            _logger = logger;
+        }
 
-		[Authorize(Roles = Role.User)]
-		[HttpGet]
-		public ActionResult<IEnumerable<BankDTO>> FindAll()
-		{
-			IEnumerable<Bank> banks = _bankService.FindAll();
+        // [Authorize(Roles = Role.User)]
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult<IEnumerable<BankDTO>> FindAll()
+        {
+            IEnumerable<Bank> banks = _bankService.FindAll();
 
-			IEnumerable<BankDTO> bankDTOs = banks.Select(x => new BankDTO
-			{
-				BankId = x.BankId,
-				BusinessName = x.BusinessName,
-				Ruc = x.Ruc,
-				TEASoles = x.TEASoles,
-				TEADolares = x.TEADolares
-			});
+            IEnumerable<BankDTO> bankDTOs = banks.Select(x => new BankDTO
+            {
+                BankId = x.BankId,
+                BusinessName = x.BusinessName,
+                Ruc = x.Ruc,
+                TEASoles = x.TEASoles,
+                TEADolares = x.TEADolares
+            });
 
-			_logger.LogWarning("llegue");
+            _logger.LogWarning("llegue");
 
-			return bankDTOs.ToList();
-		}
+            return bankDTOs.ToList();
+        }
 
-	}
+        #region FindByRuc
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult<BankDTO> Create([FromBody] BankDTO bankDto)
+        {
+            Bank foundBank = _bankService.FindByRuc(bankDto.Ruc);
+
+
+            if (foundBank != null)
+            {
+                return NotFound();
+            }
+
+            Bank bank = new Bank(bankDto);
+
+            _bankService.Create(bank);
+
+            bankDto.BankId = bank.BankId;
+
+            return bankDto;
+        }
+
+        #endregion
+    }
 }

@@ -7,8 +7,14 @@ namespace FinanzasBE.Services
 	{
 		IEnumerable<Bill> FindByPymeId(int pymeId);
 
+		IEnumerable<Bill> FindAll();
+
 		Bill FindById(int billId);
 
 		Bill Create(Bill bill);
+
+		IEnumerable<Bill> FindByUserId(int userId);
+
+		void DeleteAll();
 	}
 }

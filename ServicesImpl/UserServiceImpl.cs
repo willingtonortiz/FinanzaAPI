@@ -12,100 +12,114 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using FinanzasBE.Helpers;
 using FinanzasBE.Services;
+using FinanzasBE.Data;
 
 namespace FinanzasBE.ServicesImpl
 {
-	public class UserServiceImpl : IUserService
-	{
-		private readonly FinanzasContext _context;
-		private readonly ILogger<UserServiceImpl> _logger;
-		private readonly AppSettings _appSettings;
+    public class UserServiceImpl : IUserService
+    {
+        private readonly FinanzasContext _context;
+        private readonly ILogger<UserServiceImpl> _logger;
+        private readonly AppSettings _appSettings;
 
-		public UserServiceImpl(
-			FinanzasContext context,
-			IOptions<AppSettings> appSettings,
-			ILogger<UserServiceImpl> logger
-			)
-		{
-			_context = context;
-			_appSettings = appSettings.Value;
-			_logger = logger;
-		}
+        public UserServiceImpl(
+            FinanzasContext context,
+            IOptions<AppSettings> appSettings,
+            ILogger<UserServiceImpl> logger
+        )
+        {
+            _context = context;
+            _appSettings = appSettings.Value;
+            _logger = logger;
+        }
 
-		public UserAuthenticationDTO Authenticate(string username, string password)
-		{
-			User user = _context.Users
-				.AsNoTracking()
-				.SingleOrDefault(x => x.Username == username && x.Password == password);
+        public UserAuthenticationDTO Authenticate(string username, string password)
+        {
+            User user = _context.Users
+                .AsNoTracking()
+                .SingleOrDefault(x => x.Username == username && x.Password == password);
 
-			if (user == null)
-				return null;
+            if (user == null)
+                return null;
 
-			UserAuthenticationDTO authUser = new UserAuthenticationDTO();
-			authUser.Id = user.UserId;
-			authUser.Username = user.Username;
-			authUser.Role = user.Role;
+            UserAuthenticationDTO authUser = new UserAuthenticationDTO();
+            authUser.Id = user.UserId;
+            authUser.Username = user.Username;
+            authUser.Role = user.Role;
 
-			// Agregando el token
-			var tokenHandler = new JwtSecurityTokenHandler();
-			var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            // Agregando el token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
-			var tokenDescriptor = new SecurityTokenDescriptor
-			{
-				Subject = new ClaimsIdentity(new Claim[]{
-					new Claim(ClaimTypes.Name, user.UserId.ToString()),
-					new Claim(ClaimTypes.Role, user.Role)
-				}),
-				Expires = DateTime.UtcNow.AddDays(7),
-				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-			};
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.UserId.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
 
-			var token = tokenHandler.CreateToken(tokenDescriptor);
-			authUser.Token = tokenHandler.WriteToken(token);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            authUser.Token = tokenHandler.WriteToken(token);
 
-			user.Password = null;
-			return authUser;
-		}
+            user.Password = null;
+            return authUser;
+        }
 
-		public User FindByUsername(string username)
-		{
-			User foundUser = _context.Users
-				.AsNoTracking()
-				.FirstOrDefault(x => x.Username == username);
+        public User FindByUsername(string username)
+        {
+            User foundUser = _context.Users
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Username == username);
 
-			return foundUser;
-		}
+            return foundUser;
+        }
 
-		public void Save(User user)
-		{
-			_context.Users
-				.Add(user);
-			_context.SaveChanges();
-		}
+        public void Save(User user)
+        {
+            _context.Users
+                .Add(user);
+            _context.SaveChanges();
+        }
 
-		public User FindById(int id)
-		{
-			var user = _context.Users
-				.AsNoTracking()
-				.FirstOrDefault(x => x.UserId == id);
+        public User FindById(int id)
+        {
+            var user = _context.Users
+                .AsNoTracking()
+                .FirstOrDefault(x => x.UserId == id);
 
-			if (user != null)
-				user.Password = null;
+            if (user != null)
+                user.Password = null;
 
-			return user;
-		}
+            return user;
+        }
 
-		public IEnumerable<User> FindAll()
-		{
-			return _context.Users
-				.AsNoTracking()
-				.ToList()
-				.Select(x =>
-				{
-					x.Password = null;
-					return x;
-				});
-		}
+        public IEnumerable<User> FindAll()
+        {
+            return _context.Users
+                .AsNoTracking()
+                .ToList()
+                .Select(x =>
+                {
+                    x.Password = null;
+                    return x;
+                });
+        }
 
-	}
+        public void DeleteAll()
+        {
+            IEnumerable<User> users = _context.Users.AsNoTracking();
+
+            foreach (User user in users)
+            {
+                _context.Users.Remove(user);
+            }
+
+            _context.SaveChanges();
+        }
+    }
 }

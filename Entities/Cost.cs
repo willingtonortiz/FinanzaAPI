@@ -1,32 +1,33 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FinanzasBE.Enums;
 
 namespace FinanzasBE.Entities
 {
-	public class Cost
-	{
-		[Key]
-		public int CostId { get; set; }
+    public class Cost
+    {
+        [Key] public int CostId { get; set; }
 
-		[DataType(DataType.Text)]
-		public string Reason { get; set; }
+        [DataType(DataType.Text)] public string Reason { get; set; }
 
-		// Gasto inicial o final
-		[DataType(DataType.Text)]
-		public string CostType { get; set; }
+        public CostType CostType { get; set; }
 
+        public double Amount { get; set; }
 
+        public PaymentType PaymentType { get; set; }
 
-		public List<DiscountCost> DiscountCosts { get; set; }
+        public CurrencyCode CurrencyCode { get; set; }
 
+        public int DiscountId { get; set; }
+        public Discount Discount { get; set; }
 
+        public Cost()
+        {
+        }
 
-		public Cost() { }
-		// public Cost(){}
-
-		public override string ToString()
-		{
-			return $"Cost {{ CostId: {CostId}, Reason: {Reason}, CostType: {CostType}}}";
-		}
-	}
+        public override string ToString()
+        {
+            return $"Cost {{ CostId: {CostId}, Reason: {Reason}, CostType: {CostType}}}";
+        }
+    }
 }

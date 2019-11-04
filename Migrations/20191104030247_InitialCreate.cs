@@ -25,20 +25,6 @@ namespace FinanzasBE.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Costs",
-                columns: table => new
-                {
-                    CostId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Reason = table.Column<string>(nullable: true),
-                    CostType = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Costs", x => x.CostId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -83,9 +69,10 @@ namespace FinanzasBE.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
-                    Currency = table.Column<string>(nullable: true),
+                    CurrencyCode = table.Column<int>(nullable: false),
                     Amount = table.Column<double>(nullable: false),
-                    BillType = table.Column<int>(nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
                     DrawerRuc = table.Column<string>(nullable: true),
                     DraweeRuc = table.Column<string>(nullable: true),
                     PymeId = table.Column<int>(nullable: false)
@@ -168,51 +155,27 @@ namespace FinanzasBE.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DiscountCosts",
+                name: "Costs",
                 columns: table => new
                 {
-                    DiscountId = table.Column<int>(nullable: false),
-                    CostId = table.Column<int>(nullable: false),
-                    DiscountCostId = table.Column<int>(nullable: false),
+                    CostId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Reason = table.Column<string>(nullable: true),
+                    CostType = table.Column<int>(nullable: false),
                     Amount = table.Column<double>(nullable: false),
-                    ValueType = table.Column<string>(nullable: true)
+                    PaymentType = table.Column<int>(nullable: false),
+                    CurrencyCode = table.Column<int>(nullable: false),
+                    DiscountId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DiscountCosts", x => new { x.DiscountId, x.CostId });
-                    table.UniqueConstraint("AK_DiscountCosts_DiscountCostId", x => x.DiscountCostId);
+                    table.PrimaryKey("PK_Costs", x => x.CostId);
                     table.ForeignKey(
-                        name: "FK_DiscountCosts_Costs_CostId",
-                        column: x => x.CostId,
-                        principalTable: "Costs",
-                        principalColumn: "CostId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DiscountCosts_Discounts_DiscountId",
+                        name: "FK_Costs_Discounts_DiscountId",
                         column: x => x.DiscountId,
                         principalTable: "Discounts",
                         principalColumn: "DiscountId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "UserId", "Password", "Role", "Username" },
-                values: new object[] { 1, "20123456789", "USER", "20123456789" });
-
-            migrationBuilder.InsertData(
-                table: "Pymes",
-                columns: new[] { "PymeId", "Address", "BusinessName", "Ruc", "UserId" },
-                values: new object[] { 1, "no address", "PYME SAC", "20123456789", 1 });
-
-            migrationBuilder.InsertData(
-                table: "Bills",
-                columns: new[] { "BillId", "Amount", "BillType", "Currency", "DraweeRuc", "DrawerRuc", "EndDate", "PymeId", "StartDate" },
-                values: new object[,]
-                {
-                    { 1, 1000.0, 1, "SOLES", "20123456789", "20123456789", new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(74), 1, new DateTime(2019, 10, 22, 9, 46, 38, 490, DateTimeKind.Local).AddTicks(7249) },
-                    { 2, 2000.0, 2, "DOLARES", "20123456789", "20123456789", new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1162), 1, new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1141) },
-                    { 3, 3000.0, 3, "SOLES", "20123456789", "20123456789", new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1190), 1, new DateTime(2019, 10, 22, 9, 46, 38, 492, DateTimeKind.Local).AddTicks(1188) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -221,9 +184,9 @@ namespace FinanzasBE.Migrations
                 column: "PymeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DiscountCosts_CostId",
-                table: "DiscountCosts",
-                column: "CostId");
+                name: "IX_Costs_DiscountId",
+                table: "Costs",
+                column: "DiscountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DiscountPools_BankId",
@@ -255,9 +218,6 @@ namespace FinanzasBE.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "DiscountCosts");
-
             migrationBuilder.DropTable(
                 name: "Costs");
 
