@@ -15,7 +15,7 @@ namespace FinanzasBE.Converters
                 EndDate = dto.EndDate,
                 DraweeRuc = dto.DraweeRuc,
                 DrawerRuc = dto.DrawerRuc,
-                BillId = dto.BillId,
+                PymeId = dto.BillId,
                 Type = dto.Type,
                 Status = dto.Status
             };

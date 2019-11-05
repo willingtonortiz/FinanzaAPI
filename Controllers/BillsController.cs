@@ -92,8 +92,9 @@ namespace FinanzasBE.Controllers
             {
                 return BadRequest();
             }
-
+            billDTO.BillId=foundPyme.PymeId;
             Bill bill = _billConverter.FromDto(billDTO);
+             _logger.LogWarning(bill.ToString());
             _billService.Create(bill);
 
             return billDTO;
