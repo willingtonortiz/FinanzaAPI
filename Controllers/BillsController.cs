@@ -91,8 +91,9 @@ namespace FinanzasBE.Controllers
             {
                 return NotFound();
             }
-
+            
             Bill bill = _billConverter.FromCreateBill(createBill);
+
             _billService.Create(bill);
 
             return _billConverter.FromEntity(bill);

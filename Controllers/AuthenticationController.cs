@@ -72,7 +72,7 @@ namespace FinanzasBE.Controllers
                     Role = RoleType.USER
                 };
                 _userService.Save(newUser);
-
+                _logger.LogError("guardo al usuario");
                 Pyme newPyme = new Pyme()
                 {
                     Ruc = registerUser.Username,
