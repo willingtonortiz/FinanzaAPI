@@ -73,6 +73,7 @@ namespace FinanzasBE
             services.AddScoped<DiscountConverter>();
             services.AddScoped<CreateDiscountPoolConverter>();
             services.AddScoped<DiscountPoolOutputConverter>();
+            services.AddScoped<BankConverter>();
 
 
             services.AddDbContext<FinanzasContext>(options =>

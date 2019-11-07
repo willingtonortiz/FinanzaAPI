@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using FinanzasBE.Converters;
 using FinanzasBE.DTOs;
+using FinanzasBE.DTOs.Input;
 using FinanzasBE.Entities;
 using FinanzasBE.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,15 +16,21 @@ namespace FinanzasBE.Controllers
     [Route("api/[controller]")]
     public class BanksController : ControllerBase
     {
-        private readonly IBankService _bankService;
-
         private readonly ILogger<BanksController> _logger;
+        private readonly IBankService _bankService;
+        private readonly BankConverter _bankConverter;
 
-        public BanksController(IBankService bankService, ILogger<BanksController> logger)
+        public BanksController(
+            ILogger<BanksController> logger,
+            IBankService bankService,
+            BankConverter bankConverter
+        )
         {
-            _bankService = bankService;
             _logger = logger;
+            _bankService = bankService;
+            _bankConverter = bankConverter;
         }
+
 
         // [Authorize(Roles = Role.User)]
         [AllowAnonymous]
@@ -31,16 +39,7 @@ namespace FinanzasBE.Controllers
         {
             IEnumerable<Bank> banks = _bankService.FindAll();
 
-            IEnumerable<BankDTO> bankDTOs = banks.Select(x => new BankDTO
-            {
-                BankId = x.BankId,
-                BusinessName = x.BusinessName,
-                Ruc = x.Ruc,
-                TEASoles = x.TEASoles,
-                TEADolares = x.TEADolares
-            });
-
-            _logger.LogWarning("llegue");
+            IEnumerable<BankDTO> bankDTOs = banks.Select(x => _bankConverter.FromEntity(x));
 
             return bankDTOs.ToList();
         }
@@ -49,23 +48,24 @@ namespace FinanzasBE.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult<BankDTO> Create([FromBody] BankDTO bankDto)
+        public ActionResult<BankDTO> Create(
+            [FromBody] CreateBank createBank
+        )
         {
-            Bank foundBank = _bankService.FindByRuc(bankDto.Ruc);
-
+            Bank foundBank = _bankService.FindByRuc(createBank.Ruc);
 
             if (foundBank != null)
             {
                 return NotFound();
             }
 
-            Bank bank = new Bank(bankDto);
+            Bank newBank = _bankConverter.CreateBankToBank(createBank);
 
-            _bankService.Create(bank);
+            _bankService.Create(newBank);
 
-            bankDto.BankId = bank.BankId;
+            BankDTO createdBank = _bankConverter.FromEntity(newBank);
 
-            return bankDto;
+            return Ok(createdBank);
         }
 
         #endregion

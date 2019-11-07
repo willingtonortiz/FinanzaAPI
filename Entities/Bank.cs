@@ -24,15 +24,6 @@ namespace FinanzasBE.Entities
         {
         }
 
-        public Bank(BankDTO bankDTO)
-        {
-            BankId = bankDTO.BankId;
-            Ruc = bankDTO.Ruc;
-            BusinessName = bankDTO.BusinessName;
-            TEASoles = bankDTO.TEASoles;
-            TEADolares = bankDTO.TEADolares;
-        }
-
         public override string ToString()
         {
             return

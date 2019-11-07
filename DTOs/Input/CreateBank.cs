@@ -1,11 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-using FinanzasBE.Entities;
-
-namespace FinanzasBE.DTOs
+namespace FinanzasBE.DTOs.Input
 {
-    public class BankDTO
+    public class CreateBank
     {
-        public int Id { get; set; }
         public string Ruc { get; set; }
         public string BusinessName { get; set; }
         public double TEASoles { get; set; }
