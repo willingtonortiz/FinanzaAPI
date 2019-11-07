@@ -1,4 +1,5 @@
 using FinanzasBE.DTOs;
+using FinanzasBE.DTOs.Input;
 using FinanzasBE.Entities;
 
 namespace FinanzasBE.Converters
@@ -15,7 +16,7 @@ namespace FinanzasBE.Converters
                 EndDate = dto.EndDate,
                 DraweeRuc = dto.DraweeRuc,
                 DrawerRuc = dto.DrawerRuc,
-                BillId = dto.BillId,
+                BillId = dto.Id,
                 Type = dto.Type,
                 Status = dto.Status
             };
@@ -25,15 +26,31 @@ namespace FinanzasBE.Converters
         {
             return new BillDTO
             {
+                Id = entity.BillId,
                 Amount = entity.Amount,
                 CurrencyCode = entity.CurrencyCode,
-                BillId = entity.BillId,
                 Type = entity.Type,
                 DraweeRuc = entity.DraweeRuc,
                 DrawerRuc = entity.DrawerRuc,
                 EndDate = entity.EndDate,
                 StartDate = entity.StartDate,
-                Status = entity.Status
+                Status = entity.Status,
+            };
+        }
+
+        public Bill FromCreateBill(CreateBill createBill)
+        {
+            return new Bill
+            {
+                Amount = createBill.Amount,
+                PymeId = createBill.PymeId,
+                Status = createBill.Status,
+                Type = createBill.Type,
+                CurrencyCode = createBill.CurrencyCode,
+                DraweeRuc = createBill.DraweeRuc,
+                DrawerRuc = createBill.DrawerRuc,
+                EndDate = createBill.EndDate,
+                StartDate = createBill.StartDate
             };
         }
     }

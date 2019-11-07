@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FinanzasBE.Converters;
 using FinanzasBE.DTOs;
+using FinanzasBE.DTOs.Input;
 using FinanzasBE.Entities;
 using FinanzasBE.Enums;
 using FinanzasBE.Services;
@@ -78,25 +79,23 @@ namespace FinanzasBE.Controllers
 
         #region Create
 
-        [Authorize(Roles = RoleType.USER)]
+        //[Authorize(Roles = RoleType.USER)]
         [HttpPost]
-        public ActionResult<BillDTO> Create([FromBody] BillDTO billDTO)
+        public ActionResult<BillDTO> Create(
+            [FromBody] CreateBill createBill
+        )
         {
-            int userId = int.Parse(User.Identity.Name);
-            _logger.LogWarning(userId.ToString());
-
-            Pyme foundPyme = _pymeService.FindByUserId(userId);
-            _logger.LogWarning(foundPyme.ToString());
+            Pyme foundPyme = _pymeService.FindById(createBill.PymeId);
 
             if (foundPyme == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            Bill bill = _billConverter.FromDto(billDTO);
+            Bill bill = _billConverter.FromCreateBill(createBill);
             _billService.Create(bill);
 
-            return billDTO;
+            return _billConverter.FromEntity(bill);
         }
 
         #endregion

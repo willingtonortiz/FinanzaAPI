@@ -3,18 +3,16 @@ using FinanzasBE.Entities;
 
 namespace FinanzasBE.Services
 {
-	public interface IBillService
-	{
-		IEnumerable<Bill> FindByPymeId(int pymeId);
+    public interface IBillService
+    {
+        IEnumerable<Bill> FindByPymeId(int pymeId);
 
-		IEnumerable<Bill> FindAll();
+        IEnumerable<Bill> FindAll();
 
-		Bill FindById(int billId);
+        Bill FindById(int billId);
 
-		Bill Create(Bill bill);
+        Bill Create(Bill bill);
 
-		IEnumerable<Bill> FindByUserId(int userId);
-
-		void DeleteAll();
-	}
+        void DeleteAll();
+    }
 }

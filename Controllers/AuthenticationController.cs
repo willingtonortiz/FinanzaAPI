@@ -35,10 +35,8 @@ namespace FinanzasBE.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult Login([FromBody] User userParam)
+        public ActionResult<UserAuthenticationDTO> Login([FromBody] User userParam)
         {
-            _logger.LogError("llegue aqui");
-            
             UserAuthenticationDTO user = _userService.Authenticate(userParam.Username, userParam.Password);
 
             if (user == null)
@@ -80,7 +78,7 @@ namespace FinanzasBE.Controllers
                     Ruc = registerUser.Username,
                     BusinessName = registerUser.BusinessName,
                     Address = registerUser.Address,
-                    UserId = newUser.UserId
+                    PymeId = newUser.UserId
                 };
                 _pymeService.Save(newPyme);
 

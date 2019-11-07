@@ -16,13 +16,6 @@ namespace FinanzasBE.ServicesImpl
             _context = context;
         }
 
-        public IEnumerable<Bill> FindByUserId(int userId)
-        {
-            return _context.Bills
-                .AsNoTracking()
-                .Where(x => x.Pyme.UserId == userId);
-        }
-
         public void DeleteAll()
         {
             IEnumerable<Bill> bills = _context.Bills.AsNoTracking();

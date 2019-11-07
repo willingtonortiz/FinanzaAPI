@@ -93,7 +93,7 @@ namespace FinanzasBE.Controllers
                 return BadRequest();
             }
 
-            IEnumerable<Bill> bills = _billService.FindByUserId(userId);
+            IEnumerable<Bill> bills = _billService.FindByPymeId(userId);
 
             return bills.Select(x => _billConverter.FromEntity(x)).ToList();
         }

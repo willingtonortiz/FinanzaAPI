@@ -66,7 +66,7 @@ namespace FinanzasBE.Controllers
             {
                 Username = "20123456789",
                 Password = "20123456789",
-                Role = "USER",
+                Role = "USER"
             };
             _userService.Save(user1);
 
@@ -75,7 +75,7 @@ namespace FinanzasBE.Controllers
                 Address = "address_1",
                 Ruc = "20123456789",
                 BusinessName = "business_name_1",
-                UserId = user1.UserId
+                PymeId = user1.UserId
             };
             _pymeService.Save(pyme1);
 

@@ -1,12 +1,10 @@
 using System;
-using FinanzasBE.Entities;
 using FinanzasBE.Enums;
 
-namespace FinanzasBE.DTOs
+namespace FinanzasBE.DTOs.Input
 {
-    public class BillDTO
+    public class CreateBill
     {
-        public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public CurrencyCode CurrencyCode { get; set; }
@@ -15,5 +13,6 @@ namespace FinanzasBE.DTOs
         public BillStatus Status { get; set; }
         public string DrawerRuc { get; set; }
         public string DraweeRuc { get; set; }
+        public int PymeId { get; set; }
     }
 }

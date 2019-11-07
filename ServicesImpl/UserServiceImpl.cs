@@ -42,11 +42,12 @@ namespace FinanzasBE.ServicesImpl
             if (user == null)
                 return null;
 
-            UserAuthenticationDTO authUser = new UserAuthenticationDTO();
-            authUser.Id = user.UserId;
-            authUser.Username = user.Username;
-            authUser.Role = user.Role;
-
+            UserAuthenticationDTO authUser = new UserAuthenticationDTO
+            {
+                Id = user.UserId,
+                Role = user.Role
+            };
+            
             // Agregando el token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
