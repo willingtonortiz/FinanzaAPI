@@ -15,5 +15,7 @@ namespace FinanzasBE.DTOs
         public BillStatus Status { get; set; }
         public string DrawerRuc { get; set; }
         public string DraweeRuc { get; set; }
+        public string PaymentPlace { get; set; }
+        public string SignPlace { get; set; }
     }
 }

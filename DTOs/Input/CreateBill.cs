@@ -14,5 +14,7 @@ namespace FinanzasBE.DTOs.Input
         public string DrawerRuc { get; set; }
         public string DraweeRuc { get; set; }
         public int PymeId { get; set; }
+        public string PaymentPlace { get; set; }
+        public string SignPlace { get; set; }
     }
 }

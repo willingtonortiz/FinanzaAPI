@@ -9,7 +9,7 @@ namespace FinanzasBE.Converters
         {
             return new Pyme
             {
-                PymeId = dto.PymeId,
+                PymeId = dto.Id,
                 Address = dto.Address,
                 Ruc = dto.Ruc,
                 BusinessName = dto.BusinessName
@@ -20,7 +20,7 @@ namespace FinanzasBE.Converters
         {
             return new PymeDTO
             {
-                PymeId = entity.PymeId,
+                Id = entity.PymeId,
                 Address = entity.Address,
                 Ruc = entity.Ruc,
                 BusinessName = entity.BusinessName

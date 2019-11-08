@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FinanzasBE.Converters;
 using FinanzasBE.DTOs;
 using FinanzasBE.DTOs.Input;
@@ -17,10 +18,14 @@ namespace FinanzasBE.Controllers
     [Route("api/[controller]")]
     public class BillsController : ControllerBase
     {
+        #region Attributes
+
         private readonly ILogger<BillsController> _logger;
         private readonly IBillService _billService;
         private readonly IPymeService _pymeService;
         private readonly BillConverter _billConverter;
+
+        #endregion
 
 
         #region Constructor
@@ -91,12 +96,33 @@ namespace FinanzasBE.Controllers
             {
                 return NotFound();
             }
-            
+
             Bill bill = _billConverter.FromCreateBill(createBill);
 
             _billService.Create(bill);
 
             return _billConverter.FromEntity(bill);
+        }
+
+        #endregion
+
+
+        #region DeleteById
+
+        [HttpDelete("{billId}")]
+        public async Task<ActionResult<BillDTO>> DeleteById(
+            [FromRoute] int billId
+        )
+        {
+            Bill bill = _billService.FindById(billId);
+            if (bill == null)
+            {
+                return NotFound("BILL NOT FOUND");
+            }
+
+            Bill deletedBill = await _billService.DeleteByIdAsync(billId);
+            BillDTO billDto = _billConverter.FromEntity(deletedBill);
+            return Ok(billDto);
         }
 
         #endregion

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FinanzasBE.Data;
 using FinanzasBE.Entities;
 using FinanzasBE.Services;
@@ -14,6 +15,18 @@ namespace FinanzasBE.ServicesImpl
         public BillServiceImpl(FinanzasContext context)
         {
             _context = context;
+        }
+
+        public async Task<Bill> DeleteByIdAsync(int billId)
+        {
+            Bill bill = await _context.Bills
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BillId == billId);
+
+            _context.Bills.Remove(bill);
+
+            await _context.SaveChangesAsync();
+            return bill;
         }
 
         public void DeleteAll()

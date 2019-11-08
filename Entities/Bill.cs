@@ -12,10 +12,14 @@ namespace FinanzasBE.Entities
         [DataType(DataType.Date)] public DateTime EndDate { get; set; }
         public CurrencyCode CurrencyCode { get; set; }
         [DataType(DataType.Currency)] public double Amount { get; set; }
+        [EnumDataType(typeof(BillType))]
         public BillType Type { get; set; }
+        [EnumDataType(typeof(BillStatus))]
         public BillStatus Status { get; set; }
         public string DrawerRuc { get; set; }
         public string DraweeRuc { get; set; }
+        public string PaymentPlace { get; set; }
+        public string SignPlace { get; set; }
 
         public int PymeId { get; set; }
         public Pyme Pyme { get; set; }

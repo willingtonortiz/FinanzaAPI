@@ -15,8 +15,7 @@ namespace FinanzasBE.Data
 
         public DbSet<Cost> Costs { get; set; }
         // public DbSet<DiscountCost> DiscountCosts { get; set; }
-
-
+        
         public FinanzasContext(DbContextOptions<FinanzasContext> options) : base(options)
         {
         }

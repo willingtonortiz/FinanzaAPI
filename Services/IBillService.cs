@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FinanzasBE.Entities;
 
 namespace FinanzasBE.Services
@@ -13,6 +14,7 @@ namespace FinanzasBE.Services
 
         Bill Create(Bill bill);
 
+        Task<Bill> DeleteByIdAsync(int billId);
         void DeleteAll();
     }
 }

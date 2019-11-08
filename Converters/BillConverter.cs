@@ -18,7 +18,9 @@ namespace FinanzasBE.Converters
                 DrawerRuc = dto.DrawerRuc,
                 BillId = dto.Id,
                 Type = dto.Type,
-                Status = dto.Status
+                Status = dto.Status,
+                PaymentPlace = dto.PaymentPlace,
+                SignPlace = dto.SignPlace
             };
         }
 
@@ -35,6 +37,8 @@ namespace FinanzasBE.Converters
                 EndDate = entity.EndDate,
                 StartDate = entity.StartDate,
                 Status = entity.Status,
+                PaymentPlace = entity.PaymentPlace,
+                SignPlace = entity.SignPlace
             };
         }
 
@@ -50,7 +54,9 @@ namespace FinanzasBE.Converters
                 DraweeRuc = createBill.DraweeRuc,
                 DrawerRuc = createBill.DrawerRuc,
                 EndDate = createBill.EndDate,
-                StartDate = createBill.StartDate
+                StartDate = createBill.StartDate,
+                PaymentPlace = createBill.PaymentPlace,
+                SignPlace = createBill.SignPlace
             };
         }
     }

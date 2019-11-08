@@ -69,5 +69,27 @@ namespace FinanzasBE.Controllers
         }
 
         #endregion
+
+
+        #region FindById
+
+        [HttpGet("{pymeId}")]
+        public ActionResult<PymeDTO> FindById(
+            [FromRoute] int pymeId
+        )
+        {
+            Pyme foundPyme = _pymeService.FindById(pymeId);
+
+            if (foundPyme == null)
+            {
+                return NotFound("BILL_NOT_FOUND");
+            }
+
+            PymeDTO billDto = _pymeConverter.FromEntity(foundPyme);
+
+            return Ok(billDto);
+        }
+
+        #endregion
     }
 }
