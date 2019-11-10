@@ -101,7 +101,9 @@ namespace FinanzasBE.Controllers
 
             _billService.Create(bill);
 
-            return _billConverter.FromEntity(bill);
+            BillDTO billDto = _billConverter.FromEntity(bill);
+
+            return Ok(billDto);
         }
 
         #endregion

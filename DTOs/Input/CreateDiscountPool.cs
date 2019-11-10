@@ -17,8 +17,7 @@ namespace FinanzasBE.DTOs.Input
 
 		[Required]
 		public int PymeId { get; set; }
-
-		[Required]
+		
 		public int BankId { get; set; }
 
 		[Required]

@@ -25,6 +25,7 @@ namespace FinanzasBE.ServicesImpl
             _context = context;
         }
 
+        
         public IEnumerable<DiscountPool> FindAll()
         {
             return _context.DiscountPools
@@ -33,6 +34,7 @@ namespace FinanzasBE.ServicesImpl
                 .ThenInclude(x => x.Bill);
         }
 
+        
         public DiscountPool Create(DiscountPool discountPool)
         {
             _context.DiscountPools
@@ -43,6 +45,7 @@ namespace FinanzasBE.ServicesImpl
             return discountPool;
         }
 
+        
         public DiscountPool CreateCompleteDiscountPool(DiscountPool discountPool)
         {
             _logger.LogError(discountPool.Discounts.Count().ToString());
@@ -72,6 +75,7 @@ namespace FinanzasBE.ServicesImpl
             return discountPool;
         }
 
+        
         public void DeleteAll()
         {
             IEnumerable<DiscountPool> discountPools = _context.DiscountPools.AsNoTracking();

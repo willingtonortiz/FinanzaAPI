@@ -7,7 +7,9 @@ using FinanzasBE.DTOs.Output;
 using FinanzasBE.Entities;
 using FinanzasBE.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -73,9 +75,14 @@ namespace FinanzasBE.Controllers
             [FromBody] CreateDiscountPool createDiscountPool
         )
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             DiscountPool discountPool = _createDiscountPoolConverter.FromDto(createDiscountPool);
+
+            // Todo: Validar que los campos ingresados sean correctos
 
             discountPool = _discountPoolService.CreateCompleteDiscountPool(discountPool);
 
