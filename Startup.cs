@@ -3,6 +3,7 @@ using FinanzasBE.Converters;
 using FinanzasBE.Data;
 using FinanzasBE.Entities;
 using FinanzasBE.Helpers;
+using FinanzasBE.Repositories;
 using FinanzasBE.Services;
 using FinanzasBE.ServicesImpl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -58,6 +59,10 @@ namespace FinanzasBE
 
 
             // Configuración de injección de dependencias
+            
+            // Repositorios
+            services.AddScoped<BillRepository>();
+            
             // Servicios
             services.AddScoped<IUserService, UserServiceImpl>();
             services.AddScoped<IPymeService, PymeServiceImpl>();

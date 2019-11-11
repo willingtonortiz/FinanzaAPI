@@ -3,20 +3,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using FinanzasBE.Data;
 using FinanzasBE.Entities;
-using FinanzasBE.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinanzasBE.ServicesImpl
+namespace FinanzasBE.Repositories
 {
-    public class BillServiceImpl : IBillService
+    public class BillRepository : BaseRepository
     {
-        private readonly FinanzasContext _context;
-
-        public BillServiceImpl(FinanzasContext context)
+        public BillRepository(FinanzasContext context) : base(context)
         {
-            _context = context;
         }
 
+        public async Task<IEnumerable<Bill>> FindAllByPymeIdAsync(int pymeId)
+        {
+            return await _context.Bills
+                .AsNoTracking()
+                .Where(x => x.PymeId == pymeId)
+                .ToListAsync();
+        }
+        
         public async Task<Bill> DeleteByIdAsync(int billId)
         {
             Bill bill = await _context.Bills
@@ -29,6 +33,16 @@ namespace FinanzasBE.ServicesImpl
             return bill;
         }
 
+        public Bill UpdateBill(Bill bill)
+        {
+            _context.Bills
+                .Update(bill);
+
+            _context.SaveChanges();
+
+            return bill;
+        }
+        
         public void DeleteAll()
         {
             IEnumerable<Bill> bills = _context.Bills.AsNoTracking();

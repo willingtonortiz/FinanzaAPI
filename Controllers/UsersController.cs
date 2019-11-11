@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FinanzasBE.Converters;
 using FinanzasBE.DTOs;
 using FinanzasBE.Entities;
@@ -82,7 +83,7 @@ namespace FinanzasBE.Controllers
 
         [AllowAnonymous]
         [HttpGet("{userId}/bills")]
-        public ActionResult<IEnumerable<BillDTO>> FindBillsByUserId(
+        public async Task<ActionResult<IEnumerable<BillDTO>>> FindBillsByUserId(
             [FromRoute] int userId
         )
         {
@@ -93,9 +94,9 @@ namespace FinanzasBE.Controllers
                 return BadRequest();
             }
 
-            IEnumerable<Bill> bills = _billService.FindByPymeId(userId);
+            IEnumerable<Bill> bills = await _billService.FindAllByPymeIdAsync(userId);
 
-            return bills.Select(x => _billConverter.FromEntity(x)).ToList();
+            return Ok(bills.Select(x => _billConverter.FromEntity(x)));
         }
 
         #endregion

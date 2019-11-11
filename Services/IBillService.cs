@@ -7,6 +7,7 @@ namespace FinanzasBE.Services
     public interface IBillService
     {
         IEnumerable<Bill> FindByPymeId(int pymeId);
+        Task<IEnumerable<Bill>> FindAllByPymeIdAsync(int pymeId);
 
         IEnumerable<Bill> FindAll();
 

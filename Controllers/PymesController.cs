@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FinanzasBE.Converters;
 using FinanzasBE.DTOs;
 using FinanzasBE.Entities;
 using FinanzasBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace FinanzasBE.Controllers
 {
@@ -14,18 +16,21 @@ namespace FinanzasBE.Controllers
     [Route("api/[controller]")]
     public class PymesController : ControllerBase
     {
+        private readonly ILogger<PymesController> _logger;
         private readonly IPymeService _pymeService;
         private readonly IBillService _billService;
         private readonly PymeConverter _pymeConverter;
         private readonly BillConverter _billConverter;
 
         public PymesController(
+            ILogger<PymesController> logger,
             IPymeService pymeService,
             IBillService billService,
             PymeConverter pymeConverter,
             BillConverter billConverter
         )
         {
+            _logger = logger;
             _pymeService = pymeService;
             _billService = billService;
             _pymeConverter = pymeConverter;
@@ -54,7 +59,9 @@ namespace FinanzasBE.Controllers
         // [Authorize(Roles = Role.User)]
         [Route("{pymeId}/bills")]
         [HttpGet]
-        public ActionResult<IEnumerable<BillDTO>> FindBillsByPymeId(int pymeId)
+        public async Task<ActionResult<IEnumerable<BillDTO>>> FindBillsByPymeIdAsync(
+            [FromRoute] int pymeId
+            )
         {
             Pyme foundPyme = _pymeService.FindById(pymeId);
 
@@ -62,10 +69,10 @@ namespace FinanzasBE.Controllers
             {
                 return BadRequest();
             }
+            
+            IEnumerable<Bill> bills = await _billService.FindAllByPymeIdAsync(pymeId);
 
-            IEnumerable<Bill> bills = _billService.FindByPymeId(pymeId);
-
-            return bills.Select(x => _billConverter.FromEntity(x)).ToList();
+            return Ok(bills.Select(x => _billConverter.FromEntity(x)));
         }
 
         #endregion
