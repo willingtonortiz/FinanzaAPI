@@ -25,7 +25,7 @@ namespace FinanzasBE.Converters
                 Id = entity.BankId,
                 Ruc = entity.Ruc,
                 BusinessName = entity.BusinessName,
-                TEADolares = entity.TEASoles,
+                TEADolares = entity.TEADolares,
                 TEASoles = entity.TEASoles
             };
         }
