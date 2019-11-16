@@ -76,6 +76,7 @@ namespace FinanzasBE
             services.AddScoped<BillConverter>();
             services.AddScoped<PymeConverter>();
             services.AddScoped<DiscountConverter>();
+            services.AddScoped<DiscountPoolConverter>();
             services.AddScoped<CreateDiscountPoolConverter>();
             services.AddScoped<DiscountPoolOutputConverter>();
             services.AddScoped<BankConverter>();

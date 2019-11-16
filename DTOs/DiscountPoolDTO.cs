@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
 using FinanzasBE.Enums;
 
-namespace FinanzasBE.DTOs.Output
+namespace FinanzasBE.DTOs
 {
-	public class DiscountPoolOutput
+	public class DiscountPoolDTO
 	{
 		public int Id { get; set; }
 		public double ReceivedValue { get; set; }
 		public double DeliveredValue { get; set; }
-		public double Tcea { get; set; }
+		public double TCEA { get; set; }
 		public DateTime DiscountDate { get; set; }
 		public CurrencyCode CurrencyCode { get; set; }
-		public int PymeId { get; set; }
-		public IEnumerable<DiscountOutput> Discounts { get; set; } = new List<DiscountOutput>();
 	}
 }

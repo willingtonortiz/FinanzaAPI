@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FinanzasBE.Enums;
 
 namespace FinanzasBE.Entities
 {
@@ -15,6 +16,7 @@ namespace FinanzasBE.Entities
         public double TCEA { get; set; }
 
         [DataType(DataType.Date)] public DateTime DiscountDate { get; set; }
+        public CurrencyCode CurrencyCode { get; set; }
 
 
         // Navigation properties
@@ -29,9 +31,6 @@ namespace FinanzasBE.Entities
         public DiscountPool()
         {
         }
-
-        // public DiscountPool() { }
-
 
         public override string ToString()
         {

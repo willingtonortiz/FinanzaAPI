@@ -16,7 +16,7 @@ namespace FinanzasBE.DTOs.Output
         public double DeliveredValue { get; set; }
         public double Tcea { get; set; }
         
-        public int BillId { get; set; }
+        public BillOutput Bill { get; set; }
         public List<CostOutput> Costs { get; set; }
     }
 }

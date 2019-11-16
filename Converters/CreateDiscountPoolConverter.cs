@@ -16,6 +16,7 @@ namespace FinanzasBE.Converters
                 ReceivedValue = dto.ReceivedValue,
                 TCEA = dto.Tcea,
                 DiscountDate = dto.DiscountDate,
+                CurrencyCode = dto.CurrencyCode,
                 PymeId = dto.PymeId
             };
             if (dto.BankId < 0)

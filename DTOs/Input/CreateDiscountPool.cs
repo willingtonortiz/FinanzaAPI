@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FinanzasBE.Enums;
 
 namespace FinanzasBE.DTOs.Input
 {
@@ -14,6 +15,7 @@ namespace FinanzasBE.DTOs.Input
 		public double Tcea { get; set; }
 		[Required]
 		public DateTime DiscountDate { get; set; }
+		public CurrencyCode CurrencyCode { get; set; }
 
 		[Required]
 		public int PymeId { get; set; }
