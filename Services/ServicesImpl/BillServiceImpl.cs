@@ -10,127 +10,146 @@ using Microsoft.Extensions.Logging;
 
 namespace FinanzasBE.ServicesImpl
 {
-    public class BillServiceImpl : IBillService
-    {
-        private readonly BillRepository _billRepository;
-        private readonly ILogger<BillServiceImpl> _logger;
-
-        
-        #region Constructor
-
-        public BillServiceImpl(
-            ILogger<BillServiceImpl> logger,
-            BillRepository billRepository
-        )
-        {
-            _billRepository = billRepository;
-            _logger = logger;
-        }
-
-        #endregion
+	public class BillServiceImpl : IBillService
+	{
+		private readonly BillRepository _billRepository;
+		private readonly ILogger<BillServiceImpl> _logger;
 
 
-        #region FindByPymeId
+		#region Constructor
 
-        public IEnumerable<Bill> FindByPymeId(int pymeId)
-        {
-            return _billRepository.FindByPymeId(pymeId);
-        }
+		public BillServiceImpl(
+			ILogger<BillServiceImpl> logger,
+			BillRepository billRepository
+		)
+		{
+			_billRepository = billRepository;
+			_logger = logger;
+		}
 
-        #endregion
-
-
-        #region FindAllByPymeIdAsync
-
-        public async Task<IEnumerable<Bill>> FindAllByPymeIdAsync(int pymeId)
-        {
-            // Obteniendo las letras
-            IEnumerable<Bill> bills = await _billRepository.FindAllByPymeIdAsync(pymeId);
-
-            DateTime today = DateTime.Now.Date;
-
-            // Validando su vencimiento
-            foreach (Bill bill in bills)
-            {
-                if (bill.EndDate < today)
-                {
-                    bill.Status = BillStatus.EXPIRED;
-                    _billRepository.UpdateBill(bill);
-                }
-            }
-
-            return bills;
-        }
-
-        #endregion
+		#endregion
 
 
-        #region FindAll
+		#region FindByPymeId
 
-        public IEnumerable<Bill> FindAll()
-        {
-            return _billRepository.FindAll();
-        }
+		public IEnumerable<Bill> FindByPymeId(int pymeId)
+		{
+			return _billRepository.FindByPymeId(pymeId);
+		}
 
-        #endregion
-
-
-        #region FindById
-
-        public Bill FindById(int billId)
-        {
-            Bill bill = _billRepository.FindById(billId);
-
-            DateTime today = DateTime.Now.Date;
-
-            if (bill.EndDate < today)
-            {
-                bill.Status = BillStatus.EXPIRED;
-                _billRepository.UpdateBill(bill);
-            }
-
-            return bill;
-        }
-
-        #endregion
+		#endregion
 
 
-        #region Create
+		#region FindAllByPymeIdAsync
 
-        public Bill Create(Bill bill)
-        {
-            DateTime today = DateTime.Now.Date;
+		public async Task<IEnumerable<Bill>> FindAllByPymeIdAsync(int pymeId)
+		{
+			IEnumerable<Bill> bills = await _billRepository.FindAllByPymeIdAsync(pymeId);
 
-            if (bill.EndDate < today)
-            {
-                bill.Status = BillStatus.EXPIRED;
-            }
+			DateTime today = DateTime.Now.Date;
 
-            Bill newBill = _billRepository.Create(bill);
+			// Validando letras expiradas
+			foreach (Bill bill in bills)
+			{
+				if (bill.EndDate < today && bill.Status == BillStatus.VALID)
+				{
+					bill.Status = BillStatus.EXPIRED;
+					_billRepository.UpdateBill(bill);
+				}
+			}
 
-            return newBill;
-        }
+			// Validando letras creadas
+			foreach (Bill bill in bills)
+			{
+				if (bill.StartDate <= today && bill.Status == BillStatus.NOT_CREATED)
+				{
+					bill.Status = BillStatus.VALID;
+					_billRepository.UpdateBill(bill);
+				}
+			}
 
-        #endregion
+			return bills;
+		}
+
+		#endregion
 
 
-        #region DeleteByIdAsync
+		#region FindAll
 
-        public Task<Bill> DeleteByIdAsync(int billId)
-        {
-            return _billRepository.DeleteByIdAsync(billId);
-        }
+		public IEnumerable<Bill> FindAll()
+		{
+			return _billRepository.FindAll();
+		}
 
-        #endregion
+		#endregion
 
 
-        #region DeleteAll
+		#region FindById
 
-        public void DeleteAll()
-        {
-            _billRepository.DeleteAll();
-        }
+		public Bill FindById(int billId)
+		{
+			Bill bill = _billRepository.FindById(billId);
 
-        #endregion
-    }
+			DateTime today = DateTime.Now.Date;
+
+			if (bill.EndDate < today && bill.Status == BillStatus.VALID)
+			{
+				bill.Status = BillStatus.EXPIRED;
+				_billRepository.UpdateBill(bill);
+			}
+
+			if (bill.StartDate <= today && bill.Status == BillStatus.NOT_CREATED)
+			{
+				bill.Status = BillStatus.VALID;
+				_billRepository.UpdateBill(bill);
+			}
+
+			return bill;
+		}
+
+		#endregion
+
+
+		#region Create
+
+		public Bill Create(Bill bill)
+		{
+			DateTime today = DateTime.Now.Date;
+
+			if (bill.EndDate < today)
+			{
+				bill.Status = BillStatus.EXPIRED;
+			}
+
+			if (bill.StartDate > today)
+			{
+				bill.Status = BillStatus.NOT_CREATED;
+			}
+			Bill newBill = _billRepository.Create(bill);
+
+			return newBill;
+		}
+
+		#endregion
+
+
+		#region DeleteByIdAsync
+
+		public Task<Bill> DeleteByIdAsync(int billId)
+		{
+			return _billRepository.DeleteByIdAsync(billId);
+		}
+
+		#endregion
+
+
+		#region DeleteAll
+
+		public void DeleteAll()
+		{
+			_billRepository.DeleteAll();
+		}
+
+		#endregion
+	}
 }
