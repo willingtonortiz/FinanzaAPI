@@ -62,6 +62,7 @@ namespace FinanzasBE
             
             // Repositorios
             services.AddScoped<BillRepository>();
+            services.AddScoped<RecordRepository>();
             
             // Servicios
             services.AddScoped<IUserService, UserServiceImpl>();
@@ -71,6 +72,7 @@ namespace FinanzasBE
             services.AddScoped<IDiscountPoolService, DiscountPoolServiceImpl>();
             services.AddScoped<IDiscountService, DiscountServiceImpl>();
             services.AddScoped<ICostService, CostServiceImpl>();
+            services.AddScoped<IRecordService, RecordServiceImpl>();
 
             // Convertidores
             services.AddScoped<BillConverter>();

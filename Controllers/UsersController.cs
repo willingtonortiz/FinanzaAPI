@@ -24,13 +24,15 @@ namespace FinanzasBE.Controllers
         private readonly IPymeService _pymeService;
         private readonly IBillService _billService;
         private readonly BillConverter _billConverter;
+        private readonly IRecordService _recordService;
 
         public UsersController(
             ILogger<UsersController> logger,
             IUserService userService,
             IPymeService pymeService,
             IBillService billService,
-            BillConverter billConverter
+            BillConverter billConverter,
+            IRecordService recordService
         )
         {
             _logger = logger;
@@ -38,6 +40,7 @@ namespace FinanzasBE.Controllers
             _pymeService = pymeService;
             _billService = billService;
             _billConverter = billConverter;
+            _recordService = recordService;
         }
 
 
@@ -97,6 +100,28 @@ namespace FinanzasBE.Controllers
             IEnumerable<Bill> bills = await _billService.FindAllByPymeIdAsync(userId);
 
             return Ok(bills.Select(x => _billConverter.FromEntity(x)));
+        }
+
+        #endregion
+
+         #region FindBillsByUserId
+
+        [AllowAnonymous]
+        [HttpGet("{userId}/records")]
+        public async Task<ActionResult<IEnumerable<Record>>> FindRecordsByUserId(
+            [FromRoute] int userId
+        )
+        {
+            User foundUser = _userService.FindById(userId);
+
+            if (foundUser == null)
+            {
+                return BadRequest();
+            }
+
+            IEnumerable<Record> records = await _recordService.FindByUserId(userId);
+
+            return Ok(records);
         }
 
         #endregion

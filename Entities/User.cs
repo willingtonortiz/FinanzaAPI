@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FinanzasBE.DTOs;
 
@@ -14,6 +15,8 @@ namespace FinanzasBE.Entities
         [DataType(DataType.Text)] public string Role { get; set; }
 
         public Pyme Pyme { get; set; }
+
+        public List<Record> Records { get; set; }
 
 
         public User()

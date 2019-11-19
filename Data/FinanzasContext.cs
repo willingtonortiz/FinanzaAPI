@@ -14,6 +14,8 @@ namespace FinanzasBE.Data
         public DbSet<Discount> Discounts { get; set; }
 
         public DbSet<Cost> Costs { get; set; }
+
+        public DbSet<Record> Records { get; set; }
         // public DbSet<DiscountCost> DiscountCosts { get; set; }
         
         public FinanzasContext(DbContextOptions<FinanzasContext> options) : base(options)
@@ -29,6 +31,7 @@ namespace FinanzasBE.Data
             modelBuilder.Entity<DiscountPool>();
             modelBuilder.Entity<Discount>();
             modelBuilder.Entity<Cost>();
+            modelBuilder.Entity<Record>();
         }
     }
 }
