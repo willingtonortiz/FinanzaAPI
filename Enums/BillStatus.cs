@@ -4,6 +4,7 @@ namespace FinanzasBE.Enums
     {
         VALID = 1,
         EXPIRED = 2,
-        DISCOUNTED = 3
+        DISCOUNTED = 3,
+        NOT_CREATED = 5
     }
 }
